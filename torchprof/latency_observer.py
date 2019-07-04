@@ -30,6 +30,8 @@ class LatencyObserver:
         trace = ancestors + [name]
         key = "|".join(trace)
         child_input = self._module_inputs[key]
+
+        # todo: support GPU
         with torch.autograd.profiler.profile() as prof:
             child(*child_input)
         self._latency_measures[key] = prof.self_cpu_time_total
@@ -40,7 +42,7 @@ class LatencyObserver:
 
     def measure_latency(self, module_input: torch.Tensor, name=None, ancestors=[]):
         """Return the layer by layer latency of running the module
-        Torch profiler output is in nanoseconds (second 10^-6)
+        Torch profiler output is in microseconds (second 10^-6)
         """
         self._module_inputs = {}
         self._latency_measures = {}
@@ -51,6 +53,7 @@ class LatencyObserver:
         key = "|".join(trace)
 
         # get overall module performance, seed module input values
+        # todo: also support GPU
         with torch.autograd.profiler.profile() as prof:
             self.module(module_input)
         self._latency_measures[key] = prof.self_cpu_time_total
