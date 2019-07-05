@@ -4,10 +4,12 @@ import torch
 class LatencyObserver:
     _module_inputs = {}
     _latency_measures = {}
+    use_cuda = False
 
-    def __init__(self, module: torch.nn.Module):
+    def __init__(self, module: torch.nn.Module, use_cuda: bool = False):
         self.module = module
         self._register_module_hooks(self.module)
+        self.use_cuda = use_cuda
 
     def _input_hook(self, key):
         def _print_input(_, module_input):
@@ -31,10 +33,11 @@ class LatencyObserver:
         key = "|".join(trace)
         child_input = self._module_inputs[key]
 
-        # todo: support GPU
-        with torch.autograd.profiler.profile() as prof:
+        with torch.autograd.profiler.profile(use_cuda=self.use_cuda) as prof:
             child(*child_input)
-        self._latency_measures[key] = prof.self_cpu_time_total
+        cpu_time_total = prof.self_cpu_time_total
+        cuda_time_total = sum([event.cuda_time_total for event in prof.function_events])
+        self._latency_measures[key] = (cpu_time_total, cuda_time_total)
 
         # recurse into children to get layer specific profile metrics
         for gchild_name, gchild in child.named_children():
@@ -53,10 +56,13 @@ class LatencyObserver:
         key = "|".join(trace)
 
         # get overall module performance, seed module input values
-        # todo: also support GPU
-        with torch.autograd.profiler.profile() as prof:
+        with torch.autograd.profiler.profile(use_cuda=self.use_cuda) as prof:
             self.module(module_input)
-        self._latency_measures[key] = prof.self_cpu_time_total
+        
+        cpu_time_total = prof.self_cpu_time_total
+        cuda_time_total = sum([event.cuda_time_total for event in prof.function_events])
+        self._latency_measures[key] = (cpu_time_total, cuda_time_total)
+
 
         # recurse into children to get layer specific profile metrics
         for child_name, child in self.module.named_children():
