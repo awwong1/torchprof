@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="torchprof",
-    version="0.0.1",
+    version="0.1.0",
     author="Alexander Wong",
     author_email="alex@udia.ca",
     description="Measure neural network device specific metrics (latency, flops, etc.)",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://git.udia.ca/alex/torchprof",
+    url="https://github.com/awwong1/torchprof",
     packages=setuptools.find_packages(),
     license="MIT",
     install_requires=[
