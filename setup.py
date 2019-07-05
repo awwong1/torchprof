@@ -13,6 +13,10 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://git.udia.ca/alex/torchprof",
     packages=setuptools.find_packages(),
+    license="MIT",
+    install_requires=[
+        "torch"
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
