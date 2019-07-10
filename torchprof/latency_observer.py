@@ -83,7 +83,7 @@ class LatencyObserver:
     def _prof_to_latency(prof_measures):
         prof_latency = []
         for trace, prof in prof_measures:
-            cpu_time = prof.self_cpu_time_total
+            cpu_time = sum([e.cpu_time_total for e in prof.function_events])
             cuda_time = sum([e.cuda_time_total for e in prof.function_events])
             prof_latency.append((trace, (cpu_time, cuda_time)))
         return prof_latency

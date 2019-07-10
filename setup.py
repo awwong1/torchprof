@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="torchprof",
-    version="0.1.0",
+    version="0.1.1",
     author="Alexander Wong",
     author_email="alex@udia.ca",
     description="Measure neural network device specific metrics (latency, flops, etc.)",
