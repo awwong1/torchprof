@@ -1,8 +1,10 @@
 import torch
 from collections import OrderedDict
 
-
 class LatencyObserver:
+    """
+    Deprecated. Please use torchprof.Profile instead.
+    """
     _module_inputs = {}
     _prof_measures = []
     use_cuda = False
