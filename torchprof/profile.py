@@ -135,8 +135,8 @@ def traces_to_display(traces, trace_events, show_events=False):
             current_tree = current_tree[name]
     tree_lines = flatten_tree(tree)
 
-    # dt = ('|', '|-- ', '+-- ', '  ') # 'ascii'
-    dt = ("\u2502  ", "\u251c\u2500\u2500 ", "\u2514\u2500\u2500 ", "  ")  # ascii-ex
+    # dt = ('|', '|-- ', '+-- ', ' ') # ascii
+    dt = ("\u2502", "\u251c\u2500\u2500 ", "\u2514\u2500\u2500 ", " ")  # ascii-ex
     format_lines = []
     for idx, tree_line in enumerate(tree_lines):
         depth, name, measures = tree_line

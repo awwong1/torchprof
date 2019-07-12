@@ -10,12 +10,14 @@ class LatencyObserver:
     use_cuda = False
 
     def __init__(self, module: torch.nn.Module, use_cuda: bool = False):
-        """Wrap all modules with a autograd profiler hook.
+        """Deprecated. Please use torchprof.Profile instead.
+        Wrap all modules with a autograd profiler hook.
 
         Arguments:
             module (torch.nn.Module): The pytorch model to profile
             use_cuda (bool): Enable profiling cuda
         """
+        print("Deprecated. Please use torchprof.Profile instead.")
         self.module = module
         self._register_module_hooks(self.module)
         self.use_cuda = use_cuda
