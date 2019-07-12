@@ -26,52 +26,51 @@ print(prof.display(show_events=False)) # equivalent to `print(prof)` and `print(
 ```text
 Module         | Self CPU total | CPU total | CUDA total
 ---------------|----------------|-----------|-----------
-AlexNet        |                |           |           
-├── features   |                |           |           
-│  ├── 0       |        1.938ms |   7.639ms |    7.696ms
-│  ├── 1       |       65.590us |  65.590us |   66.560us
-│  ├── 2       |      117.789us | 191.029us |  164.864us
-│  ├── 3       |      251.648us | 963.273us |    1.737ms
-│  ├── 4       |       18.019us |  18.019us |   19.456us
-│  ├── 5       |       30.349us |  53.739us |   54.272us
-│  ├── 6       |      130.109us | 482.766us |  645.056us
-│  ├── 7       |       17.250us |  17.250us |   18.336us
-│  ├── 8       |       83.779us | 297.796us |  538.656us
-│  ├── 9       |       16.840us |  16.840us |   17.408us
-│  ├── 10      |       85.119us | 301.186us |  441.024us
-│  ├── 11      |       16.910us |  16.910us |   17.408us
-│  └── 12      |       28.240us |  49.630us |   49.280us
-├── avgpool    |       43.489us |  76.088us |   80.896us
-└── classifier |                |           |           
-  ├── 0        |      626.506us |   1.240ms |    1.362ms
-  ├── 1        |      235.148us | 235.148us |  648.192us
-  ├── 2        |       18.360us |  18.360us |   19.360us
-  ├── 3        |       30.770us |  54.640us |   55.296us
-  ├── 4        |       39.189us |  39.189us |  209.920us
-  ├── 5        |       16.430us |  16.430us |   17.408us
-  └── 6        |       38.270us |  38.270us |   79.648us
+AlexNet        |                |           |
+├── features   |                |           |
+│├── 0         |        1.956ms |   7.714ms |    7.787ms
+│├── 1         |       68.880us |  68.880us |   69.632us
+│├── 2         |       85.639us | 155.948us |  155.648us
+│├── 3         |      253.419us | 970.386us |    1.747ms
+│├── 4         |       18.919us |  18.919us |   19.584us
+│├── 5         |       30.910us |  54.900us |   55.296us
+│├── 6         |      132.839us | 492.367us |  652.192us
+│├── 7         |       17.990us |  17.990us |   18.432us
+│├── 8         |       87.219us | 310.776us |  552.544us
+│├── 9         |       17.620us |  17.620us |   17.536us
+│├── 10        |       85.690us | 303.120us |  437.248us
+│├── 11        |       17.910us |  17.910us |   18.400us
+│└── 12        |       29.239us |  51.488us |   52.288us
+├── avgpool    |       49.230us |  85.740us |   88.960us
+└── classifier |                |           |
+ ├── 0         |      626.236us |   1.239ms |    1.362ms
+ ├── 1         |      235.669us | 235.669us |  635.008us
+ ├── 2         |       17.990us |  17.990us |   18.432us
+ ├── 3         |       31.890us |  56.770us |   57.344us
+ ├── 4         |       39.280us |  39.280us |  212.128us
+ ├── 5         |       16.800us |  16.800us |   17.600us
+ └── 6         |       38.459us |  38.459us |   79.872us
 ```
 
 To see the low level operations that occur within each layer, print the contents of  `prof.display(show_events=True)`.
 
 ```text
-Module                            | Self CPU total | CPU total | CUDA total
-----------------------------------|----------------|-----------|-----------
-AlexNet                           |                |           |           
-├── features                      |                |           |           
-│  ├── 0                          |                |           |           
-│  │  ├── conv2d                  |       17.070us |   1.938ms |    1.950ms
-│  │  ├── convolution             |       12.240us |   1.921ms |    1.935ms
-│  │  ├── _convolution            |       36.129us |   1.908ms |    1.923ms
-│  │  ├── contiguous              |        6.820us |   6.820us |    6.688us
-│  │  └── cudnn_convolution       |        1.865ms |   1.865ms |    1.882ms
-│  ├── 1                          |                |           |           
-│  │  └── relu_                   |       65.590us |  65.590us |   66.560us
-│  ├── 2                          |                |           |           
-│  │  ├── max_pool2d              |       44.549us | 117.789us |   91.136us
-│  │  └── max_pool2d_with_indices |       73.240us |  73.240us |   73.728us
-│  ├── 3                          |                |           |           
-
+Module                        | Self CPU total | CPU total | CUDA total
+------------------------------|----------------|-----------|-----------
+AlexNet                       |                |           |
+├── features                  |                |           |
+│├── 0                        |                |           |
+││├── conv2d                  |       15.740us |   1.956ms |    1.972ms
+││├── convolution             |       12.000us |   1.940ms |    1.957ms
+││├── _convolution            |       36.590us |   1.928ms |    1.946ms
+││├── contiguous              |        6.600us |   6.600us |    6.464us
+││└── cudnn_convolution       |        1.885ms |   1.885ms |    1.906ms
+│├── 1                        |                |           |
+││└── relu_                   |       68.880us |  68.880us |   69.632us
+│├── 2                        |                |           |
+││├── max_pool2d              |       15.330us |  85.639us |   84.992us
+││└── max_pool2d_with_indices |       70.309us |  70.309us |   70.656us
+│├── 3                        |                |           |
 ...
 ```
 
@@ -89,14 +88,14 @@ print(event_lists_dict[trace[2].path][0])
 ---------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------
 Name                   Self CPU total %   Self CPU total      CPU total %        CPU total     CPU time avg     CUDA total %       CUDA total    CUDA time avg  Number of Calls
 ---------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------
-conv2d                           0.88%         17.070us          100.00%          1.938ms          1.938ms           25.34%          1.950ms          1.950ms                1
-convolution                      0.63%         12.240us           99.12%          1.921ms          1.921ms           25.14%          1.935ms          1.935ms                1
-_convolution                     1.86%         36.129us           98.49%          1.908ms          1.908ms           24.99%          1.923ms          1.923ms                1
-contiguous                       0.35%          6.820us            0.35%          6.820us          6.820us            0.09%          6.688us          6.688us                1
-cudnn_convolution               96.27%          1.865ms           96.27%          1.865ms          1.865ms           24.45%          1.882ms          1.882ms                1
+conv2d                           0.80%         15.740us          100.00%          1.956ms          1.956ms           25.32%          1.972ms          1.972ms                1
+convolution                      0.61%         12.000us           99.20%          1.940ms          1.940ms           25.14%          1.957ms          1.957ms                1
+_convolution                     1.87%         36.590us           98.58%          1.928ms          1.928ms           24.99%          1.946ms          1.946ms                1
+contiguous                       0.34%          6.600us            0.34%          6.600us          6.600us            0.08%          6.464us          6.464us                1
+cudnn_convolution               96.37%          1.885ms           96.37%          1.885ms          1.885ms           24.47%          1.906ms          1.906ms                1
 ---------------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------  ---------------
-Self CPU time total: 1.938ms
-CUDA time total: 7.696ms
+Self CPU time total: 1.956ms
+CUDA time total: 7.787ms
 
 ```
 
