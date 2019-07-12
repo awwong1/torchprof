@@ -69,6 +69,7 @@ class Profile(object):
                     res = _forward(*args, **kwargs)
                 event_list = prof.function_events
                 event_list.populate_cpu_children()
+                # each profile call should be contained in its own list
                 self.trace_profile_events[path].append(event_list)
                 return res
 
@@ -85,9 +86,11 @@ class Profile(object):
             return (self.traces, self.trace_profile_events)
 
     def display(self, show_events=False):
-        return traces_to_display(
-            self.traces, self.trace_profile_events, show_events=show_events
-        )
+        if self.exited:
+            return traces_to_display(
+                self.traces, self.trace_profile_events, show_events=show_events
+            )
+        return "<unfinished torchprof.profile>"
 
 
 def flatten_tree(t, depth=0):
@@ -107,6 +110,7 @@ def traces_to_display(traces, trace_events, show_events=False):
     for trace in traces:
         [path, leaf, module] = trace
         current_tree = tree
+        # unwrap all of the events, in case model is called multiple times
         events = [te for tevents in trace_events[path] for te in tevents]
         for depth, name in enumerate(path, 1):
             if name not in current_tree:
@@ -116,7 +120,11 @@ def traces_to_display(traces, trace_events, show_events=False):
                 if show_events:
                     for event in events:
                         current_tree[name][event.name] = {
-                            None: Measure(event.self_cpu_time_total, event.cpu_time_total, event.cuda_time_total)
+                            None: Measure(
+                                event.self_cpu_time_total,
+                                event.cpu_time_total,
+                                event.cuda_time_total,
+                            )
                         }
                 else:
                     current_tree[name][None] = Measure(

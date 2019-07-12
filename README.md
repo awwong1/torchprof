@@ -1,5 +1,7 @@
 # torchprof
 
+[![PyPI version](https://badge.fury.io/py/torchprof.svg)](https://badge.fury.io/py/torchprof)
+
 A minimal dependency library for layer-by-layer profiling of Pytorch models.
 
 All metrics are derived using the PyTorch autograd profiler.
