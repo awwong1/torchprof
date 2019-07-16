@@ -99,6 +99,51 @@ CUDA time total: 7.787ms
 
 ```
 
+Layers can be selected for individually using the optional `paths` kwarg. Profiling is ignored for all other layers.
+
+```python
+model = torchvision.models.alexnet(pretrained=False)
+x = torch.rand([1, 3, 224, 224])
+
+# Layer does not have to be a leaf layer
+paths = [("AlexNet", "features", "3"), ("AlexNet", "classifier")]
+
+with torchprof.Profile(model, paths=paths) as prof:
+    model(x)
+
+print(prof)
+```
+
+```text
+Module         | Self CPU total | CPU total | CUDA total
+---------------|----------------|-----------|-----------
+AlexNet        |                |           |           
+├── features   |                |           |           
+│├── 0         |                |           |           
+│├── 1         |                |           |           
+│├── 2         |                |           |           
+│├── 3         |        2.846ms |  11.368ms |    0.000us
+│├── 4         |                |           |           
+│├── 5         |                |           |           
+│├── 6         |                |           |           
+│├── 7         |                |           |           
+│├── 8         |                |           |           
+│├── 9         |                |           |           
+│├── 10        |                |           |           
+│├── 11        |                |           |           
+│└── 12        |                |           |           
+├── avgpool    |                |           |           
+└── classifier |       12.016ms |  12.206ms |    0.000us
+ ├── 0         |                |           |           
+ ├── 1         |                |           |           
+ ├── 2         |                |           |           
+ ├── 3         |                |           |           
+ ├── 4         |                |           |           
+ ├── 5         |                |           |           
+ └── 6         |                |           |           
+
+```
+
 * [Self CPU Time vs CPU Time](https://software.intel.com/en-us/vtune-amplifier-help-self-time-and-total-time)
 
 ## LICENSE
