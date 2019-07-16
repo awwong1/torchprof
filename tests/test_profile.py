@@ -163,3 +163,5 @@ class TestProfile(unittest.TestCase):
         pretty_full = prof.display(show_events=True)
         self.assertIsInstance(pretty, str)
         self.assertIsInstance(pretty_full, str)
+
+        # pprint.pprint(pretty)

@@ -22,10 +22,11 @@ class Profile(object):
     """Layer by layer profiling of Pytorch models, using the Pytorch autograd profiler.
     """
 
-    def __init__(self, model, enabled=True, use_cuda=False):
+    def __init__(self, model, enabled=True, use_cuda=False, paths=None):
         self._model = model
         self.enabled = enabled
         self.use_cuda = use_cuda
+        self.paths = paths
 
         self.entered = False
         self.exited = False
@@ -51,7 +52,7 @@ class Profile(object):
 
     def __str__(self):
         if self.exited:
-            return traces_to_display(self.traces, self.trace_profile_events)
+            return traces_to_display(self.traces, self.trace_profile_events, paths=self.paths)
         return "<unfinished torchprof.profile>"
 
     def __call__(self, *args, **kwargs):
@@ -59,7 +60,7 @@ class Profile(object):
 
     def _hook_trace(self, trace):
         [path, leaf, module] = trace
-        if leaf:
+        if (self.paths is not None and path in self.paths) or (self.paths is None and leaf):
             _forward = module.forward
             self._forwards[path] = _forward
 
@@ -78,7 +79,7 @@ class Profile(object):
 
     def _remove_hook_trace(self, trace):
         [path, leaf, module] = trace
-        if leaf:
+        if (self.paths is not None and path in self.paths) or (self.paths is None and leaf):
             module.forward = self._forwards[path]
 
     def raw(self):
@@ -88,7 +89,7 @@ class Profile(object):
     def display(self, show_events=False):
         if self.exited:
             return traces_to_display(
-                self.traces, self.trace_profile_events, show_events=show_events
+                self.traces, self.trace_profile_events, show_events=show_events, paths=self.paths
             )
         return "<unfinished torchprof.profile>"
 
@@ -102,7 +103,7 @@ def flatten_tree(t, depth=0):
     return l
 
 
-def traces_to_display(traces, trace_events, show_events=False):
+def traces_to_display(traces, trace_events, show_events=False, paths=None):
     """Construct human readable output of the profiler traces and events.
     """
     tree = OrderedDict()
@@ -115,7 +116,7 @@ def traces_to_display(traces, trace_events, show_events=False):
         for depth, name in enumerate(path, 1):
             if name not in current_tree:
                 current_tree[name] = OrderedDict()
-            if depth == len(path) and leaf:
+            if depth == len(path) and ((paths is None and leaf) or (paths is not None and path in paths)):
                 # tree measurements have key None, avoiding name conflict
                 if show_events:
                     for event in events:
