@@ -52,7 +52,9 @@ class Profile(object):
 
     def __str__(self):
         if self.exited:
-            return traces_to_display(self.traces, self.trace_profile_events, paths=self.paths)
+            return traces_to_display(
+                self.traces, self.trace_profile_events, paths=self.paths
+            )
         return "<unfinished torchprof.profile>"
 
     def __call__(self, *args, **kwargs):
@@ -60,7 +62,9 @@ class Profile(object):
 
     def _hook_trace(self, trace):
         [path, leaf, module] = trace
-        if (self.paths is not None and path in self.paths) or (self.paths is None and leaf):
+        if (self.paths is not None and path in self.paths) or (
+            self.paths is None and leaf
+        ):
             _forward = module.forward
             self._forwards[path] = _forward
 
@@ -79,7 +83,9 @@ class Profile(object):
 
     def _remove_hook_trace(self, trace):
         [path, leaf, module] = trace
-        if (self.paths is not None and path in self.paths) or (self.paths is None and leaf):
+        if (self.paths is not None and path in self.paths) or (
+            self.paths is None and leaf
+        ):
             module.forward = self._forwards[path]
 
     def raw(self):
@@ -89,18 +95,21 @@ class Profile(object):
     def display(self, show_events=False):
         if self.exited:
             return traces_to_display(
-                self.traces, self.trace_profile_events, show_events=show_events, paths=self.paths
+                self.traces,
+                self.trace_profile_events,
+                show_events=show_events,
+                paths=self.paths,
             )
         return "<unfinished torchprof.profile>"
 
 
 def flatten_tree(t, depth=0):
-    l = []
+    flat = []
     for name, st in t.items():
         measures = st.pop(None, None)
-        l.append([depth, name, measures])
-        l.extend(flatten_tree(st, depth=depth + 1))
-    return l
+        flat.append([depth, name, measures])
+        flat.extend(flatten_tree(st, depth=depth + 1))
+    return flat
 
 
 def traces_to_display(traces, trace_events, show_events=False, paths=None):
@@ -116,7 +125,9 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
         for depth, name in enumerate(path, 1):
             if name not in current_tree:
                 current_tree[name] = OrderedDict()
-            if depth == len(path) and ((paths is None and leaf) or (paths is not None and path in paths)):
+            if depth == len(path) and (
+                (paths is None and leaf) or (paths is not None and path in paths)
+            ):
                 # tree measurements have key None, avoiding name conflict
                 if show_events:
                     for event in events:

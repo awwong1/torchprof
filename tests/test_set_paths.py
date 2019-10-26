@@ -3,6 +3,7 @@ import torch
 import torchprof
 import torchvision
 
+
 class TestSetPaths(unittest.TestCase):
     def test_cpu_profile_structure(self):
         model = torchvision.models.alexnet(pretrained=False)

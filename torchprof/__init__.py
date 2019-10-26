@@ -1,7 +1,6 @@
-name = "torchprof"
-
-from torchprof.latency_observer import LatencyObserver
 from torchprof.profile import Profile
 
-__all__ = ["LatencyObserver", "Profile"]
+name = "torchprof"
+
+__all__ = ["Profile"]
 __version__ = "0.3.1"

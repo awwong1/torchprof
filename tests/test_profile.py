@@ -2,7 +2,6 @@ import unittest
 import torch
 import torchprof
 import torchvision
-import pprint
 
 
 class TestProfile(unittest.TestCase):
@@ -137,7 +136,9 @@ class TestProfile(unittest.TestCase):
     def test_cuda_profile_structure(self):
         model = torchvision.models.alexnet(pretrained=False).cuda()
         x = torch.rand([1, 3, 224, 224]).cuda()
-        self._profile_structure(model, x, use_cuda=True, alexnet_ops=self.alexnet_gpu_ops)
+        self._profile_structure(
+            model, x, use_cuda=True, alexnet_ops=self.alexnet_gpu_ops
+        )
 
     def _profile_structure(self, model, x, use_cuda=False, alexnet_ops=[]):
         with torchprof.Profile(model, use_cuda=use_cuda) as prof:
