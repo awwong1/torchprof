@@ -3,7 +3,7 @@ import torch.autograd.profiler as tprofiler
 from collections import namedtuple, defaultdict, OrderedDict
 
 Trace = namedtuple("Trace", ["path", "leaf", "module"])
-Measure = namedtuple("Measure", ["self_cpu_total", "cpu_total", "cuda_total"])
+Measure = namedtuple("Measure", ["self_cpu_total", "cpu_total", "cuda_total", "occurrences"])
 
 
 def walk_modules(module, name="", path=()):
@@ -133,9 +133,10 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
                     for event in events:
                         current_tree[name][event.name] = {
                             None: Measure(
-                                event.self_cpu_time_total,
-                                event.cpu_time_total,
-                                event.cuda_time_total,
+                                sum([e.self_cpu_time_total for e in events if e.name == event.name]),
+                                sum([e.cpu_time_total for e in events if e.name == event.name]),
+                                sum([e.cuda_time_total for e in events if e.name == event.name]),
+                                len([e for e in events if e.name == event.name])
                             )
                         }
                 else:
@@ -143,6 +144,7 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
                         sum([e.self_cpu_time_total for e in events]),
                         sum([e.cpu_time_total for e in events]),
                         sum([e.cuda_time_total for e in events]),
+                        len(trace_events[path])
                     )
             current_tree = current_tree[name]
     tree_lines = flatten_tree(tree)
@@ -155,10 +157,12 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
         self_cpu_time = ""
         cpu_time = ""
         cuda_time = ""
+        occurrences = ""
         if measures:
             self_cpu_time = tprofiler.format_time(measures.self_cpu_total)
             cpu_time = tprofiler.format_time(measures.cpu_total)
             cuda_time = tprofiler.format_time(measures.cuda_total)
+            occurrences = str(measures.occurrences)
         pre = ""
         next_depths = [pl[0] for pl in tree_lines[idx + 1 :]]
         current = True
@@ -175,22 +179,24 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
                     pre = dt[3] + pre
             depth -= 1
             current = False
-        format_lines.append([pre + name, self_cpu_time, cpu_time, cuda_time])
+        format_lines.append([pre + name, self_cpu_time, cpu_time, cuda_time, occurrences])
 
     # construct the table
-    heading = ("Module", "Self CPU total", "CPU total", "CUDA total")
+    heading = ("Module", "Self CPU total", "CPU total", "CUDA total", "Occurrences")
     max_lens = [max(map(len, col)) for col in zip(*([heading] + format_lines))]
     # create the heading
     disp = "{:<{}s}".format(heading[0], max_lens[0]) + " | "
     disp += "{:>{}s}".format(heading[1], max_lens[1]) + " | "
     disp += "{:>{}s}".format(heading[2], max_lens[2]) + " | "
-    disp += "{:>{}s}".format(heading[3], max_lens[3]) + "\n"
+    disp += "{:>{}s}".format(heading[3], max_lens[3]) + " | "
+    disp += "{:>{}s}".format(heading[4], max_lens[4]) + "\n"
     disp += "-|-".join(["-" * mlen for mlen in max_lens]) + "\n"
     for line in format_lines:
-        label, self_cpu_time, cpu_time, cuda_time = line
+        label, self_cpu_time, cpu_time, cuda_time, occurrences = line
         disp += "{:<{}s}".format(label, max_lens[0]) + " | "
         disp += "{:>{}s}".format(self_cpu_time, max_lens[1]) + " | "
         disp += "{:>{}s}".format(cpu_time, max_lens[2]) + " | "
-        disp += "{:>{}s}".format(cuda_time, max_lens[3]) + "\n"
+        disp += "{:>{}s}".format(cuda_time, max_lens[3]) + " | "
+        disp += "{:>{}s}".format(occurrences, max_lens[4]) + "\n"
 
     return disp
