@@ -145,5 +145,20 @@ AlexNet        |                |           |            |
 
 * [Self CPU Time vs CPU Time](https://software.intel.com/en-us/vtune-amplifier-help-self-time-and-total-time)
 
+## Citation
+
+If this software is useful to your research, I would greatly appreciate a citation in your work.
+
+```tex
+@misc{torchprof,
+  author       = {Alexander William Wong}, 
+  title        = {torchprof},
+  howpublished = {github.com},
+  month        = 4,
+  year         = 2020,
+  note         = {A minimal dependency library for layer-by-layer profiling of Pytorch models.}
+}
+```
+
 ## LICENSE
 [MIT](LICENSE)
