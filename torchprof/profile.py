@@ -5,25 +5,19 @@ from collections import namedtuple, defaultdict, OrderedDict
 Trace = namedtuple("Trace", ["path", "leaf", "module"])
 Measure = namedtuple("Measure", ["self_cpu_total", "cpu_total", "cuda_total", "occurrences"])
 
-CurDepth = 0
-
 
 def walk_modules(module, name="", path=(), depth=-1):
     """Generator. Walks through a PyTorch Module and outputs Trace tuples"""
-    global CurDepth
-    CurDepth += 1
-
     if not name:
         name = module.__class__.__name__
     named_children = list(module.named_children())
     path = path + (name,)
-    yield Trace(path, len(named_children) == 0 or (CurDepth > depth and depth != -1), module)
+    yield Trace(path, len(named_children) == 0 or (len(path) > depth and depth != -1), module)
 
-    if CurDepth <= depth or depth == -1:
+    if len(path) <= depth or depth == -1:
         # recursively walk into all submodules
         for name, child_module in named_children:
             yield from walk_modules(child_module, name=name, path=path, depth=depth)
-    CurDepth -= 1
 
 
 class Profile(object):
