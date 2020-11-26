@@ -1,4 +1,5 @@
 import functools
+from itertools import groupby
 import torch.autograd.profiler as tprofiler
 from collections import namedtuple, defaultdict, OrderedDict
 
@@ -130,13 +131,14 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
             ):
                 # tree measurements have key None, avoiding name conflict
                 if show_events:
-                    for event in events:
-                        current_tree[name][event.name] = {
+                    for event_name, event_group in groupby(events, lambda e: e.name):
+                        event_group = list(event_group)
+                        current_tree[name][event_name] = {
                             None: Measure(
-                                sum([e.self_cpu_time_total for e in events if e.name == event.name]),
-                                sum([e.cpu_time_total for e in events if e.name == event.name]),
-                                sum([e.cuda_time_total for e in events if e.name == event.name]),
-                                len([e for e in events if e.name == event.name])
+                                sum([e.self_cpu_time_total for e in event_group]),
+                                sum([e.cpu_time_total for e in event_group]),
+                                sum([e.cuda_time_total for e in event_group]),
+                                len(event_group)
                             )
                         }
                 else:
