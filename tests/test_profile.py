@@ -34,97 +34,254 @@ class TestProfile(unittest.TestCase):
     ]
 
     alexnet_cpu_ops = [
-        None,
-        None,
+        None,  # 0
+        None,  # 1
         (
-            "conv2d",
-            "convolution",
-            "_convolution",
-            "contiguous",
-            "contiguous",
-            "contiguous",
-            "mkldnn_convolution",
-        ),
-        ("relu_",),
-        ("max_pool2d", "max_pool2d_with_indices"),
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::mkldnn_convolution",
+            "aten::as_strided_",
+        ),  # 2
+        ("aten::relu_", "aten::threshold_"),  # 3
         (
-            "conv2d",
-            "convolution",
-            "_convolution",
-            "contiguous",
-            "contiguous",
-            "contiguous",
-            "mkldnn_convolution",
-        ),
-        ("relu_",),
-        ("max_pool2d", "max_pool2d_with_indices"),
+            "aten::max_pool2d",
+            "aten::max_pool2d_with_indices",
+            "aten::contiguous",
+        ),  # 4
         (
-            "conv2d",
-            "convolution",
-            "_convolution",
-            "contiguous",
-            "contiguous",
-            "contiguous",
-            "mkldnn_convolution",
-        ),
-        ("relu_",),
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::mkldnn_convolution",
+            "aten::as_strided_",
+        ),  # 5
+        ("aten::relu_", "aten::threshold_"),  # 6
         (
-            "conv2d",
-            "convolution",
-            "_convolution",
-            "contiguous",
-            "contiguous",
-            "contiguous",
-            "mkldnn_convolution",
-        ),
-        ("relu_",),
+            "aten::max_pool2d",
+            "aten::max_pool2d_with_indices",
+            "aten::contiguous",
+        ),  # 7
         (
-            "conv2d",
-            "convolution",
-            "_convolution",
-            "contiguous",
-            "contiguous",
-            "contiguous",
-            "mkldnn_convolution",
-        ),
-        ("relu_",),
-        ("max_pool2d", "max_pool2d_with_indices"),
-        ("adaptive_avg_pool2d", "_adaptive_avg_pool2d"),
-        None,
-        ("dropout", "empty_like", "empty", "bernoulli_", "div_", "mul"),
-        ("unsigned short", "addmm"),
-        ("relu_",),
-        ("dropout", "empty_like", "empty", "bernoulli_", "div_", "mul"),
-        ("unsigned short", "addmm"),
-        ("relu_",),
-        ("unsigned short", "addmm"),
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::mkldnn_convolution",
+            "aten::as_strided_",
+        ),  # 8
+        ("aten::relu_", "aten::threshold_"),  # 9
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::mkldnn_convolution",
+            "aten::as_strided_",
+        ),  # 10
+        ("aten::relu_", "aten::threshold_"),  # 11
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::mkldnn_convolution",
+            "aten::as_strided_",
+        ),  # 12
+        ("aten::relu_", "aten::threshold_"),  # 13
+        (
+            "aten::max_pool2d",
+            "aten::max_pool2d_with_indices",
+            "aten::contiguous",
+        ),  # 14
+        (
+            "aten::adaptive_avg_pool2d",
+            "aten::_adaptive_avg_pool2d",
+        ),  # 15
+        None,  # 16
+        (
+            "aten::dropout",
+            "aten::empty_like",
+            "aten::bernoulli_",
+            "aten::div_",
+            "aten::to",
+            "aten::empty_strided",
+            "aten::mul",
+        ),  # 17
+        (
+            "aten::t",
+            "aten::transpose",
+            "aten::as_strided",
+            "aten::addmm",
+            "aten::expand",
+            "aten::as_strided",
+        ),  # 18
+        ("aten::relu_", "aten::threshold_"),  # 19
+        (
+            "aten::dropout",
+            "aten::empty_like",
+            "aten::bernoulli_",
+            "aten::div_",
+            "aten::to",
+            "aten::empty_strided",
+            "aten::mul",
+        ),  # 20
+        (
+            "aten::t",
+            "aten::transpose",
+            "aten::as_strided",
+            "aten::addmm",
+            "aten::expand",
+            "aten::as_strided",
+        ),  # 21
+        ("aten::relu_", "aten::threshold_"),  # 22
+        (
+            "aten::t",
+            "aten::transpose",
+            "aten::as_strided",
+            "aten::addmm",
+            "aten::expand",
+            "aten::as_strided",
+        ),  # 23
     ]
 
     alexnet_gpu_ops = (
-        None,
-        None,
-        ("conv2d", "convolution", "_convolution", "contiguous", "cudnn_convolution"),
-        ("relu_",),
-        ("max_pool2d", "max_pool2d_with_indices"),
-        ("conv2d", "convolution", "_convolution", "contiguous", "cudnn_convolution"),
-        ("relu_",),
-        ("max_pool2d", "max_pool2d_with_indices"),
-        ("conv2d", "convolution", "_convolution", "contiguous", "cudnn_convolution"),
-        ("relu_",),
-        ("conv2d", "convolution", "_convolution", "contiguous", "cudnn_convolution"),
-        ("relu_",),
-        ("conv2d", "convolution", "_convolution", "contiguous", "cudnn_convolution"),
-        ("relu_",),
-        ("max_pool2d", "max_pool2d_with_indices"),
-        ("adaptive_avg_pool2d", "_adaptive_avg_pool2d"),
-        None,
-        ("dropout", "_fused_dropout"),
-        ("unsigned short", "addmm"),
-        ("relu_",),
-        ("dropout", "_fused_dropout"),
-        ("unsigned short", "addmm"),
-        ("relu_",),
-        ("unsigned short", "addmm"),
+        None,  # 0
+        None,  # 1
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::cudnn_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::reshape",
+            "aten::view",
+            "aten::add_",
+        ),  # 2
+        ("aten::relu_", "aten::threshold_"),  # 3
+        (
+            "aten::max_pool2d",
+            "aten::max_pool2d_with_indices",
+            "aten::contiguous",
+        ),  # 4
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::cudnn_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::reshape",
+            "aten::view",
+            "aten::add_",
+        ),  # 5
+        ("aten::relu_", "aten::threshold_"),  # 6
+        (
+            "aten::max_pool2d",
+            "aten::max_pool2d_with_indices",
+            "aten::contiguous",
+        ),  # 7
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::cudnn_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::reshape",
+            "aten::view",
+            "aten::add_",
+        ),  # 8
+        ("aten::relu_", "aten::threshold_"),  # 9
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::cudnn_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::reshape",
+            "aten::view",
+            "aten::add_",
+        ),  # 10
+        ("aten::relu_", "aten::threshold_"),  # 11
+        (
+            "aten::conv2d",
+            "aten::convolution",
+            "aten::_convolution",
+            "aten::contiguous",
+            "aten::cudnn_convolution",
+            "aten::contiguous",
+            "aten::contiguous",
+            "aten::reshape",
+            "aten::view",
+            "aten::add_",
+        ),  # 12
+        ("aten::relu_", "aten::threshold_"),  # 13
+        (
+            "aten::max_pool2d",
+            "aten::max_pool2d_with_indices",
+            "aten::contiguous",
+        ),  # 14
+        (
+            "aten::adaptive_avg_pool2d",
+            "aten::_adaptive_avg_pool2d",
+            "aten::contiguous",
+        ),  # 15
+        None,  # 16
+        (
+            "aten::dropout",
+            "aten::_fused_dropout",
+            "aten::empty_like",
+        ),  # 17
+        (
+            "aten::t",
+            "aten::transpose",
+            "aten::as_strided",
+            "aten::addmm",
+            "aten::expand",
+            "aten::as_strided",
+        ),  # 18
+        ("aten::relu_", "aten::threshold_"),  # 19
+        (
+            "aten::dropout",
+            "aten::_fused_dropout",
+            "aten::empty_like",
+        ),  # 20
+        (
+            "aten::t",
+            "aten::transpose",
+            "aten::as_strided",
+            "aten::addmm",
+            "aten::expand",
+            "aten::as_strided",
+        ),  # 21
+        ("aten::relu_", "aten::threshold_"),  # 22
+        (
+            "aten::t",
+            "aten::transpose",
+            "aten::as_strided",
+            "aten::addmm",
+            "aten::expand",
+            "aten::as_strided",
+        ),  # 23
     )
 
     def test_cpu_profile_structure(self):
@@ -155,7 +312,13 @@ class TestProfile(unittest.TestCase):
                 self.assertEqual(len(event_lists), 1)
                 event_names = tuple(e.name for e in event_lists[0])
                 # profiler returned order is not deterministic
-                self.assertEqual(sorted(event_names), sorted(alexnet_ops[layer_idx]))
+                try:
+                    self.assertTrue(
+                        all(event_name in event_names for event_name in alexnet_ops[layer_idx]),
+                        f"Layer {layer_idx} received {event_names}, old {alexnet_ops[layer_idx]}",
+                    )
+                except IndexError:
+                    self.assertTrue(False, f"Layer {layer_idx} received {event_names}")
             else:
                 # non leaf nodes should not have event_list values
                 self.assertEqual(len(event_lists), 0)
