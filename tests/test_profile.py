@@ -44,18 +44,13 @@ class TestProfile(unittest.TestCase):
             "aten::contiguous",
             "aten::contiguous",
             "aten::mkldnn_convolution",
-            "aten::empty",
             "aten::as_strided_",
         ),  # 2
         ("aten::relu_", "aten::threshold_"),  # 3
         (
             "aten::max_pool2d",
             "aten::max_pool2d_with_indices",
-            "aten::empty",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::resize_",
         ),  # 4
         (
             "aten::conv2d",
@@ -65,18 +60,13 @@ class TestProfile(unittest.TestCase):
             "aten::contiguous",
             "aten::contiguous",
             "aten::mkldnn_convolution",
-            "aten::empty",
             "aten::as_strided_",
         ),  # 5
         ("aten::relu_", "aten::threshold_"),  # 6
         (
             "aten::max_pool2d",
             "aten::max_pool2d_with_indices",
-            "aten::empty",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::resize_",
         ),  # 7
         (
             "aten::conv2d",
@@ -86,7 +76,6 @@ class TestProfile(unittest.TestCase):
             "aten::contiguous",
             "aten::contiguous",
             "aten::mkldnn_convolution",
-            "aten::empty",
             "aten::as_strided_",
         ),  # 8
         ("aten::relu_", "aten::threshold_"),  # 9
@@ -98,7 +87,6 @@ class TestProfile(unittest.TestCase):
             "aten::contiguous",
             "aten::contiguous",
             "aten::mkldnn_convolution",
-            "aten::empty",
             "aten::as_strided_",
         ),  # 10
         ("aten::relu_", "aten::threshold_"),  # 11
@@ -110,75 +98,53 @@ class TestProfile(unittest.TestCase):
             "aten::contiguous",
             "aten::contiguous",
             "aten::mkldnn_convolution",
-            "aten::empty",
             "aten::as_strided_",
         ),  # 12
         ("aten::relu_", "aten::threshold_"),  # 13
         (
             "aten::max_pool2d",
             "aten::max_pool2d_with_indices",
-            "aten::empty",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::resize_",
         ),  # 14
         (
             "aten::adaptive_avg_pool2d",
             "aten::_adaptive_avg_pool2d",
-            "aten::empty",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::resize_",
         ),  # 15
         None,  # 16
         (
             "aten::dropout",
             "aten::empty_like",
-            "aten::empty",
             "aten::bernoulli_",
             "aten::div_",
             "aten::to",
             "aten::empty_strided",
-            "aten::copy_",
             "aten::mul",
-            "aten::empty",
         ),  # 17
         (
             "aten::t",
             "aten::transpose",
             "aten::as_strided",
             "aten::addmm",
-            "aten::empty",
             "aten::expand",
             "aten::as_strided",
-            "aten::copy_",
-            "aten::stride",
         ),  # 18
         ("aten::relu_", "aten::threshold_"),  # 19
         (
             "aten::dropout",
             "aten::empty_like",
-            "aten::empty",
             "aten::bernoulli_",
             "aten::div_",
             "aten::to",
             "aten::empty_strided",
-            "aten::copy_",
             "aten::mul",
-            "aten::empty",
         ),  # 20
         (
             "aten::t",
             "aten::transpose",
             "aten::as_strided",
             "aten::addmm",
-            "aten::empty",
             "aten::expand",
             "aten::as_strided",
-            "aten::copy_",
-            "aten::stride",
         ),  # 21
         ("aten::relu_", "aten::threshold_"),  # 22
         (
@@ -186,11 +152,8 @@ class TestProfile(unittest.TestCase):
             "aten::transpose",
             "aten::as_strided",
             "aten::addmm",
-            "aten::empty",
             "aten::expand",
             "aten::as_strided",
-            "aten::copy_",
-            "aten::stride",
         ),  # 23
     ]
 
@@ -203,16 +166,8 @@ class TestProfile(unittest.TestCase):
             "aten::_convolution",
             "aten::contiguous",
             "aten::cudnn_convolution",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::empty",
             "aten::reshape",
             "aten::view",
             "aten::add_",
@@ -221,15 +176,7 @@ class TestProfile(unittest.TestCase):
         (
             "aten::max_pool2d",
             "aten::max_pool2d_with_indices",
-            "aten::empty",
-            "aten::empty",
             "aten::contiguous",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::resize_",
-            "aten::resize_",
         ),  # 4
         (
             "aten::conv2d",
@@ -237,16 +184,8 @@ class TestProfile(unittest.TestCase):
             "aten::_convolution",
             "aten::contiguous",
             "aten::cudnn_convolution",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::empty",
             "aten::reshape",
             "aten::view",
             "aten::add_",
@@ -255,15 +194,7 @@ class TestProfile(unittest.TestCase):
         (
             "aten::max_pool2d",
             "aten::max_pool2d_with_indices",
-            "aten::empty",
-            "aten::empty",
             "aten::contiguous",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::resize_",
-            "aten::resize_",
         ),  # 7
         (
             "aten::conv2d",
@@ -271,16 +202,8 @@ class TestProfile(unittest.TestCase):
             "aten::_convolution",
             "aten::contiguous",
             "aten::cudnn_convolution",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::empty",
             "aten::reshape",
             "aten::view",
             "aten::add_",
@@ -292,16 +215,8 @@ class TestProfile(unittest.TestCase):
             "aten::_convolution",
             "aten::contiguous",
             "aten::cudnn_convolution",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::empty",
             "aten::reshape",
             "aten::view",
             "aten::add_",
@@ -313,16 +228,8 @@ class TestProfile(unittest.TestCase):
             "aten::_convolution",
             "aten::contiguous",
             "aten::cudnn_convolution",
-            "aten::empty",
             "aten::contiguous",
-            "aten::resize_",
             "aten::contiguous",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::empty",
             "aten::reshape",
             "aten::view",
             "aten::add_",
@@ -331,83 +238,40 @@ class TestProfile(unittest.TestCase):
         (
             "aten::max_pool2d",
             "aten::max_pool2d_with_indices",
-            "aten::empty",
-            "aten::empty",
             "aten::contiguous",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::resize_",
-            "aten::resize_",
         ),  # 14
         (
             "aten::adaptive_avg_pool2d",
             "aten::_adaptive_avg_pool2d",
-            "aten::empty",
             "aten::contiguous",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::resize_",
         ),  # 15
         None,  # 16
         (
             "aten::dropout",
             "aten::_fused_dropout",
             "aten::empty_like",
-            "aten::empty",
-            "aten::empty",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
         ),  # 17
         (
             "aten::t",
             "aten::transpose",
             "aten::as_strided",
             "aten::addmm",
-            "aten::empty",
             "aten::expand",
             "aten::as_strided",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
         ),  # 18
         ("aten::relu_", "aten::threshold_"),  # 19
         (
             "aten::dropout",
             "aten::_fused_dropout",
             "aten::empty_like",
-            "aten::empty",
-            "aten::empty",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
         ),  # 20
         (
             "aten::t",
             "aten::transpose",
             "aten::as_strided",
             "aten::addmm",
-            "aten::empty",
             "aten::expand",
             "aten::as_strided",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
         ),  # 21
         ("aten::relu_", "aten::threshold_"),  # 22
         (
@@ -415,13 +279,8 @@ class TestProfile(unittest.TestCase):
             "aten::transpose",
             "aten::as_strided",
             "aten::addmm",
-            "aten::empty",
             "aten::expand",
             "aten::as_strided",
-            "aten::resize_",
-            "aten::stride",
-            "aten::stride",
-            "aten::stride",
         ),  # 23
     )
 
@@ -454,9 +313,8 @@ class TestProfile(unittest.TestCase):
                 event_names = tuple(e.name for e in event_lists[0])
                 # profiler returned order is not deterministic
                 try:
-                    self.assertEqual(
-                        sorted(event_names),
-                        sorted(alexnet_ops[layer_idx]),
+                    self.assertTrue(
+                        all(event_name in event_names for event_name in alexnet_ops[layer_idx]),
                         f"Layer {layer_idx} received {event_names}, old {alexnet_ops[layer_idx]}",
                     )
                 except IndexError:
