@@ -1,6 +1,7 @@
 # torchprof
 
 [![PyPI version](https://badge.fury.io/py/torchprof.svg)](https://pypi.org/project/torchprof/)
+[![CircleCI](https://circleci.com/gh/awwong1/torchprof.svg?style=svg)](https://circleci.com/gh/awwong1/torchprof)
 
 A minimal dependency library for layer-by-layer profiling of Pytorch models.
 
