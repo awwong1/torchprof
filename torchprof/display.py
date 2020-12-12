@@ -167,8 +167,10 @@ def traces_to_display(
         depth, name, measures = tree_line
 
         next_depths = [pl[0] for pl in tree_lines[idx + 1 :]]
-        pre = dt[1] if depth in next_depths and next_depths[0] >= depth else dt[2]
-        depth -= 1
+        pre = ""
+        if depth > 0:
+            pre = dt[1] if depth in next_depths and next_depths[0] >= depth else dt[2]
+            depth -= 1
         while depth > 0:
             pre = (dt[0] + pre) if depth in next_depths else (dt[3] + pre)
             depth -= 1
