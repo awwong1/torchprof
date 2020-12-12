@@ -1,5 +1,4 @@
 from collections import OrderedDict, namedtuple
-from itertools import groupby
 
 import torch.autograd.profiler as torch_profiler
 
@@ -118,6 +117,16 @@ def _format_measure_tuple(measure):
     )
 
 
+def group_by(events, keyfn):
+    event_groups = OrderedDict()
+    for event in events:
+        key = keyfn(event)
+        key_events = event_groups.get(key, [])
+        key_events.append(event)
+        event_groups[key] = key_events
+    return event_groups.items()
+
+
 def traces_to_display(
     traces,
     trace_events,
@@ -144,7 +153,7 @@ def traces_to_display(
             ):
                 # tree measurements have key None, avoiding name conflict
                 if show_events:
-                    for event_name, event_group in groupby(events, lambda e: e.name):
+                    for event_name, event_group in group_by(events, lambda e: e.name):
                         event_group = list(event_group)
                         current_tree[name][event_name] = {
                             None: _build_measure_tuple(event_group, len(event_group))
