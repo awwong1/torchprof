@@ -35,7 +35,7 @@ def _build_measure_tuple(events, occurrences):
     self_cpu_memory = None
     has_self_cpu_memory = any(hasattr(e, "self_cpu_memory_usage") for e in events)
     if has_self_cpu_memory:
-        cpu_memory = sum([getattr(e, "self_cpu_memory_usage", 0) for e in events])
+        self_cpu_memory = sum([getattr(e, "self_cpu_memory_usage", 0) for e in events])
     cpu_memory = None
     has_cpu_memory = any(hasattr(e, "cpu_memory_usage") for e in events)
     if has_cpu_memory:
