@@ -4,7 +4,7 @@ import torch.autograd.profiler as tprofiler
 from collections import namedtuple, defaultdict, OrderedDict
 
 Trace = namedtuple("Trace", ["path", "leaf", "module"])
-Measure = namedtuple("Measure", ["self_cpu_total", "cpu_total", "cuda_total", "occurrences"])
+Measure = namedtuple("Measure", ["self_cpu_total", "cpu_total", "cuda_total", "cpu_memory", "cuda_memory", "occurrences"])
 
 
 def walk_modules(module, name="", path=()):
@@ -23,10 +23,11 @@ class Profile(object):
     """Layer by layer profiling of Pytorch models, using the Pytorch autograd profiler.
     """
 
-    def __init__(self, model, enabled=True, use_cuda=False, paths=None):
+    def __init__(self, model, enabled=True, use_cuda=False, profile_memory=False, paths=None):
         self._model = model
         self.enabled = enabled
         self.use_cuda = use_cuda
+        self.profile_memory = profile_memory
         self.paths = paths
 
         self.entered = False
@@ -71,7 +72,7 @@ class Profile(object):
 
             @functools.wraps(_forward)
             def wrap_forward(*args, **kwargs):
-                with tprofiler.profile(use_cuda=self.use_cuda) as prof:
+                with tprofiler.profile(use_cuda=self.use_cuda, profile_memory=self.profile_memory) as prof:
                     res = _forward(*args, **kwargs)
                 event_list = prof.function_events
                 event_list.populate_cpu_children()
@@ -138,6 +139,8 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
                                 sum([e.self_cpu_time_total for e in event_group]),
                                 sum([e.cpu_time_total for e in event_group]),
                                 sum([e.cuda_time_total for e in event_group]),
+                                sum([e.cpu_memory_usage for e in event_group]),
+                                sum([e.cuda_memory_usage for e in event_group]),
                                 len(event_group)
                             )
                         }
@@ -146,6 +149,8 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
                         sum([e.self_cpu_time_total for e in events]),
                         sum([e.cpu_time_total for e in events]),
                         sum([e.cuda_time_total for e in events]),
+                        sum([e.cpu_memory_usage for e in events]),
+                        sum([e.cuda_memory_usage for e in events]),
                         len(trace_events[path])
                     )
             current_tree = current_tree[name]
@@ -159,11 +164,15 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
         self_cpu_time = ""
         cpu_time = ""
         cuda_time = ""
+        cpu_memory = ""
+        cuda_memory = ""
         occurrences = ""
         if measures:
             self_cpu_time = tprofiler.format_time(measures.self_cpu_total)
             cpu_time = tprofiler.format_time(measures.cpu_total)
             cuda_time = tprofiler.format_time(measures.cuda_total)
+            cpu_memory = tprofiler.format_memory(measures.cpu_memory)
+            cuda_memory = tprofiler.format_memory(measures.cuda_memory)
             occurrences = str(measures.occurrences)
         pre = ""
         next_depths = [pl[0] for pl in tree_lines[idx + 1 :]]
@@ -181,24 +190,28 @@ def traces_to_display(traces, trace_events, show_events=False, paths=None):
                     pre = dt[3] + pre
             depth -= 1
             current = False
-        format_lines.append([pre + name, self_cpu_time, cpu_time, cuda_time, occurrences])
+        format_lines.append([pre + name, self_cpu_time, cpu_time, cuda_time, cpu_memory, cuda_memory, occurrences])
 
     # construct the table
-    heading = ("Module", "Self CPU total", "CPU total", "CUDA total", "Occurrences")
+    heading = ("Module", "Self CPU total", "CPU total", "CUDA total", "CPU mem total", "CUDA mem total", "Occurrences")
     max_lens = [max(map(len, col)) for col in zip(*([heading] + format_lines))]
     # create the heading
     disp = "{:<{}s}".format(heading[0], max_lens[0]) + " | "
     disp += "{:>{}s}".format(heading[1], max_lens[1]) + " | "
     disp += "{:>{}s}".format(heading[2], max_lens[2]) + " | "
     disp += "{:>{}s}".format(heading[3], max_lens[3]) + " | "
-    disp += "{:>{}s}".format(heading[4], max_lens[4]) + "\n"
+    disp += "{:>{}s}".format(heading[4], max_lens[4]) + " | "
+    disp += "{:>{}s}".format(heading[5], max_lens[5]) + " | "
+    disp += "{:>{}s}".format(heading[6], max_lens[6]) + "\n"
     disp += "-|-".join(["-" * mlen for mlen in max_lens]) + "\n"
     for line in format_lines:
-        label, self_cpu_time, cpu_time, cuda_time, occurrences = line
+        label, self_cpu_time, cpu_time, cuda_time, cpu_memory, cuda_memory, occurrences = line
         disp += "{:<{}s}".format(label, max_lens[0]) + " | "
         disp += "{:>{}s}".format(self_cpu_time, max_lens[1]) + " | "
         disp += "{:>{}s}".format(cpu_time, max_lens[2]) + " | "
         disp += "{:>{}s}".format(cuda_time, max_lens[3]) + " | "
-        disp += "{:>{}s}".format(occurrences, max_lens[4]) + "\n"
+        disp += "{:>{}s}".format(cpu_memory, max_lens[4]) + " | "
+        disp += "{:>{}s}".format(cuda_memory, max_lens[5]) + " | "
+        disp += "{:>{}s}".format(occurrences, max_lens[6]) + "\n"
 
     return disp
