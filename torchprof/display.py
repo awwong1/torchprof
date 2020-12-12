@@ -9,10 +9,10 @@ Measure = namedtuple(
         "cpu_total",
         "self_cuda_total",
         "cuda_total",
-        "cpu_memory",
         "self_cpu_memory",
-        "cuda_memory",
+        "cpu_memory",
         "self_cuda_memory",
+        "cuda_memory",
         "occurrences",
     ],
 )
