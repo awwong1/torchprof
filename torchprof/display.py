@@ -193,11 +193,11 @@ def traces_to_display(
         "CPU total",
         "Self CUDA total",
         "CUDA total",
-        "Self CPU mem total",
-        "CPU mem total",
-        "Self CUDA mem total",
-        "CUDA mem total",
-        "Occurrences",
+        "Self CPU Mem",
+        "CPU Mem",
+        "Self CUDA Mem",
+        "CUDA Mem",
+        "Number of Calls",
     )
     max_lens = [max(map(len, col)) for col in zip(*([heading] + format_lines))]
 
