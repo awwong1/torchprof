@@ -87,7 +87,10 @@ class Profile(object):
                         res = _forward(*args, **kwargs)
 
                 event_list = prof.function_events
-                event_list.populate_cpu_children()
+                # PyTorch up until version 1.7 exposes this method. From PyTorch 1.8 onwards, 
+                # it is called via EventList._build_tree at the end of the context manager.
+                if hasattr(event_list, "populate_cpu_children"):
+                    event_list.populate_cpu_children()
                 # each profile call should be contained in its own list
                 self.trace_profile_events[path].append(event_list)
                 return res
