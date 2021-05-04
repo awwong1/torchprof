@@ -36,6 +36,7 @@ class Profile(object):
         self.entered = False
         self.exited = False
         self.traces = ()
+        self._ids = set()
         self.trace_profile_events = defaultdict(list)
 
     def __enter__(self):
@@ -63,9 +64,14 @@ class Profile(object):
 
     def _hook_trace(self, trace):
         [path, leaf, module] = trace
+        _id = id(module)
         if (self.paths is not None and path in self.paths) or (
             self.paths is None and leaf
         ):
+            if _id in self._ids:
+                #already wrapped
+                return trace
+            self._ids.add(_id)
             _forward = module.forward
             self._forwards[path] = _forward
 
@@ -100,6 +106,11 @@ class Profile(object):
 
     def _remove_hook_trace(self, trace):
         [path, leaf, module] = trace
+        _id = id(module)
+        if _id in self._ids:
+            self._ids.discard(_id)
+        else:
+            return
         if (self.paths is not None and path in self.paths) or (
             self.paths is None and leaf
         ):
