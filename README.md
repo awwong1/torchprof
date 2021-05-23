@@ -3,6 +3,8 @@
 [![PyPI version](https://badge.fury.io/py/torchprof.svg)](https://pypi.org/project/torchprof/)
 [![CircleCI](https://circleci.com/gh/awwong1/torchprof.svg?style=svg)](https://circleci.com/gh/awwong1/torchprof)
 
+> Attention! [This library is deprecated due to the PyTorch 1.9 changes to the torch profiler. Please use the official profiler.](https://pytorch.org/docs/1.9.0/profiler.html?highlight=profiler#module-torch.profiler) Thank you!
+
 A minimal dependency library for layer-by-layer profiling of PyTorch models.
 
 All metrics are derived using the PyTorch autograd profiler.

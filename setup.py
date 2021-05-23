@@ -34,7 +34,7 @@ setuptools.setup(
     url="https://github.com/awwong1/torchprof",
     packages=setuptools.find_packages(),
     license="MIT",
-    install_requires=["torch>=1.1.0,<2"],
+    install_requires=["torch>=1.1.0,<1.9"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
